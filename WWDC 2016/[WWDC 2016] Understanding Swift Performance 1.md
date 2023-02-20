@@ -3,6 +3,7 @@
 ---
 
 [Understanding Swift Performance - WWDC16 - Videos - Apple Developer](https://developer.apple.com/videos/play/wwdc2016/416/)
+
 ![](https://i.imgur.com/3lbgg66.png)
 
 ![](https://i.imgur.com/qBJcnao.png)
