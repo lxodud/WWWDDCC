@@ -28,4 +28,7 @@
 
 🎄 [WWDC 2020 - Modern Cell Configuration](https://github.com/lxodud/WWWDDCC/blob/main/CollectionView/%5BWWDC%202020%5D%20Modern%20Cell%20Configuration.md)
 
+# Swift Concurrency
+🎭 [WWDC 2021 - Meet async/await in Swift](https://github.com/lxodud/WWWDDCC/blob/main/Swift%20Concurrency/Meet%20async-await%20in%20Swift.md)
 
+🎭 [WWDC 2021 - Use async/await with URLSession](https://github.com/lxodud/WWWDDCC/blob/main/Swift%20Concurrency/Use%20async-await%20with%20URLSession.md)
