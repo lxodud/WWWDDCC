@@ -1,4 +1,4 @@
-# [WWDC 2016] Understanding Swift Performance 1
+# Understanding Swift Performance 1
 
 ---
 
