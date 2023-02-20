@@ -1,4 +1,4 @@
-# WWDC2022 ****Explore navigation design for iOS****
+# WWDC 2022 ****Explore navigation design for iOS****
 
 [WWDC2022 Explore navigation design for iOS](https://developer.apple.com/videos/play/wwdc2022/10001/)
 
