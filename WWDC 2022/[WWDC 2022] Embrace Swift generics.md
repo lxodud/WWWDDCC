@@ -1,4 +1,4 @@
-# WWDC2022 Embrace Swift generics
+# Embrace Swift generics
 
 
 
