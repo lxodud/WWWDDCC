@@ -8,6 +8,9 @@
 
 🧵 [Concurrent Programming With GCD](https://github.com/lxodud/WWWDDCC/blob/main/WWDC%202016/Concurrent%20Programming%20With%20GCD.md)
 
+# WWDC 2019
+🌏 [Creating Great Localized Experiences with Xcode 11](https://github.com/lxodud/WWWDDCC/blob/main/WWDC%202019/Creating%20Great%20Localized%20Experiences%20with%20Xcode%2011.md)
+
 # WWDC 2022
 🏞️ [Explore navigation design for iOS](https://github.com/lxodud/WWWDDCC/blob/main/WWDC%202022/Explore%20navigation%20design%20for%20iOS.md)
 
