@@ -202,7 +202,7 @@ draw 메서드는 값의 주소를 입력으로 예상한다.
 
 그래서 이 value witness 함수는 타입에 따라서 이 차이를 추상화한다.
 
-일단 draw 메서드는 인자로 값의 주소를 받을거임 근데 Project는 값이 valueBuffer 주소고 Line은 힙 주소인데 이 차이를 추상화하는게 projectBuffer라는 소리같음
+일단 draw 메서드는 인자로 값의 주소를 받을거임 근데 Point는 값이 valueBuffer 주소고 Line은 힙 주소인데 이 차이를 추상화하는게 projectBuffer라는 소리같음
 
 ![](https://i.imgur.com/Gp98Wkq.png)
 
@@ -216,3 +216,91 @@ draw 메서드가 실행되고 완료되며 이제 함수가 끝났다. 이는 �
 
 버퍼가 할당된 경우 버퍼를 할당 해제한다.
 
+![](https://i.imgur.com/sGiXXWB.png)
+함수 실행이 완료되고 스택에 생성된 local existential container가 제거됩니다.
+
+여기서 얻어갔으면 하는 한 가지는 Line, Point와 같은 구조체를 프로토콜과 함께 결합해서 동적 동작, 동작 다형성을 얻을 수 있도록 하는 것입니다.
+Drawable 프로토콜 타입의 배열에 Line과 Point를 지정할 수 있습니다.
+
+만약 이러한 동적인 기능이 필요하다면, 앞에서 보여준 클래스를 사용하는 것과 비교해서 좋은 비용입니다. 왜냐하면 클래스도 V-테이블을 통과하며, 참조 계수(reference counting)의 추가 오버헤드가 있기 때문입니다.
+
+지역 변수가 어떻게 복사되는 지와 프로토콜 타입에서 메서드 디스패치가 어떻게 동작하는지 보았고 이제 Stored Property를 봅시다.
+
+![](https://i.imgur.com/OmzJ18B.png)
+
+위 코드에서는 프로토콜의 첫 번째와 두 번째 stored property인 drawable 프로토콜 타입을 포함하는 쌍이 있습니다
+
+Swift는 어떻게 두 개의 저장 프로퍼티를 저장할까요?
+
+![](https://i.imgur.com/tZ1nuFA.png)
+
+이들은 enclosing struct의 인라인으로 저장됩니다.
+따라서, 우리가 pair를 할당할 때, Swift는 해당 pair의 저장에 필요한 두 개의 existential container를 enclosing struct의 인라인으로 저장합니다.
+
+![](https://i.imgur.com/HN1nvuq.png)
+그런 다음 Line과 Point 쌍을 초기화하고 이전에 살펴본 것처럼 Line은 힙에 버퍼를 할당하고 Point는 inline valueBuffer에 맞고, existential container의 inline에 저장될 수 있습니다.
+
+이제 이 표현을 통해 나중에 다른 타입의 값을 저장할 수 있습니다.
+
+![](https://i.imgur.com/hlqwoy6.png)
+
+second property에 Line을 저장할 수 있습니다. (정상 동작함)
+두 개의 힙 할당을 하긴함!!
+
+힙 할당 비용을 설명해보겠습니다.
+
+![](https://i.imgur.com/mcg8eRJ.png)
+Line을 만들고 pair를 만들어서 Line으로 초기화했습니다
+
+![](https://i.imgur.com/CT8R9V1.png)
+따라서 두 개의 힙 할당이 있습니다
+
+![](https://i.imgur.com/gaxw0bI.png)
+그 다음 pair의 복사본을 다시 만들고 스택에 두 개의 existential container와 두 개의 힙 할당을 만듭니다.
+
+"Kyle은 우리에게 heap 할당이 비싸다고 말했습니다.
+그렇다면, 4개의 heap 할당? Hmm." 이렇게 말할 수 있습니다. 
+이것에 대해서 우리는 무언가를 할 수 있을까요? 
+
+![](https://i.imgur.com/3iAVkR0.png)
+
+existential container는 세 개의 word를 담을 수 있다는 것을 기억하세요. 그리고 reference는 기본적으로 한 개의 word이므로, 그 세 개의 word에 reference를 저장할 수 있습니다.
+
+따라서, 만약 우리가 클래스로 우리의 Line을 구현한다면, 클래스는 reference semantics이므로 참조에 의해 저장됩니다. 이 참조는 valueBuffer에 맞을 것입니다.
+
+![](https://i.imgur.com/1ZMjbgf.png)
+Pair에서 첫 번째 참조를 두 번째 필드로 복사할 때, 참조만 복사되고 우리가 지불하는 비용은 추가 reference counting 증가뿐입니다.
+
+지금 당신은, "잠깐만요. reference semantics가 가져오는 의도하지 않은 상태 공유에 대해 방금 들은 것이 아닌가요?" 라고 할 수 있습니다.
+
+![](https://i.imgur.com/NsKx4mQ.png)
+
+ 그래서, 만약 우리가 우리의 쌍에서 두 번째 필드를 통해 x1 필드에 저장한다면, 첫 번째 필드는 그 변경 사항을 관찰할 수 있습니다. 이것은 우리가 원하는 것이 아닙니다. 우리는 value semantics를 원합니다
+ 
+ 이 문제를 해결할 수 있는 COW라는 기술이 있습니다.
+ 
+ ![](https://i.imgur.com/VtF7wkm.png)
+ 
+ 따라서 클래스에 쓰기 전에 reference count를 확인합니다.
+ 
+ 우리는 같은 인스턴스에 대해 하나 이상의 참조가 있을 때 참조 계수가 1, 2, 3, 4, 5보다 클 수 있다는 것을 들었습니다.
+ 
+ 따라서 이 경우 인스턴스에 쓰기 전에 인스턴스를 복사한 다음 해당 복사본을 씁니다. 이렇게 하면 상태가 분리됩니다.
+ 
+ ![](https://i.imgur.com/BdwdvwR.png)
+ 
+ Line 내부에 저장소를 직접 구현하는 대신 Line 구조체의 모든 필드가 있는 LineStorage라는 클래스를 만듭니다.
+ 
+ 그런 다음 Line 구조체는 이 저장소를 참조합니다.
+ 그리고 값을 읽고 싶을 때마다 해당 스토리지 내부의 값을 읽으면 된다.
+ 
+ 그러나 값을 수정하거나 변경하려면 먼저 참조 횟수를 확인합니다.
+ 
+ 1보다 큰가? 이것이 여기서 isUniquelyReferenced 호출이 달성하는 것입니다.
+이 호출이 하는 유일한 일은 참조 횟수를 확인하는 것입니다.
+
+![](https://i.imgur.com/eLrG9De.png)
+
+1보다 크거나 같은가? 그리고 참조 횟수가 1보다 큰 경우 Line Storage의 복사본을 만들고 이를 변경합니다.
+
+여기까지가 구조체와 클래스를 결합, COW를 사용하여 간접 저장소를 얻는 방법이었습니다. (개어렵넹)
