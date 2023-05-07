@@ -311,18 +311,22 @@ Pair에서 첫 번째 참조를 두 번째 필드로 복사할 때, 참조만 �
 
 LineStorage가 어떻게 동작하는지 예제로 봅시다~~
 
-![](https://hackmd.io/_uploads/HkSThgE4n.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/160ad0da-30bd-4989-80ab-811de24ae456/image.png)
+
 
 다시 Line을 만듭니다.
 이렇게 하면 힙에 LineStorage 객체가 생성됩니다.
 그런 다음 해당 Line을 사용하여 pair을 초기화합니다.
 
-![](https://hackmd.io/_uploads/rJVFalEN3.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/77652def-ec3c-43f0-a80b-712dbd7cf92f/image.png)
+
 
 이번에는 LineStorage에 대한 참조만 복사됩니다.
-![](https://hackmd.io/_uploads/SyNhpxV4h.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/a09282ed-ca9a-44cf-8c8b-0b35797adc42/image.png)
 
-![](https://hackmd.io/_uploads/Sk710x4Eh.png)
+
+![](https://velog.velcdn.com/images/xoxo0223/post/6839864d-60f3-4092-b031-0143ac1b7b61/image.png)
+
 copy라는 변수에 pair를 할당해도 위 그림처럼 참조만 복사되고 reference count만 증가합니다.
 이것은 힙 할당보다 훨씬 저렴합니다. (좋은 트레이드오프)
 
@@ -330,36 +334,45 @@ copy라는 변수에 pair를 할당해도 위 그림처럼 참조만 복사되�
 Line이 3 words가 넘기 떄문에 heap에 할당되고 Line은 struct이기 떄문에 계속 heap에 Line 인스턴스가 할당되는게 문제였음 이걸 해결하기 위해서 Line에 있는 프로퍼티들을 LineStorage라는 클래스에 넣게되면 Line은 1 word짜리 참조를 담고 있는 프로퍼티만 가지고 있으니까 Existential Container에 바로 저장되고 거기서 Line이 LineStorage를 참조하고 있게 되는거임 여기서 복사가 발생하게 되면 복사된 곳에서도 같은 LineStorage를 참조하게 되니까 힙 할당이 줄어드는거임 그럼 reference sementics의 문제인 의도적인 상태 공유에 대해서는 어떻게 해결하냐 하믄 아까 위에서 본 move 메서드를 통해서 해결하는 거임
 위에서 보면 변경이 일어날 때 move 메서드 내부에서 isUniquelyReferencedNonObjc를 통해서 참조횟수가 1보다 큰지를 즉, 참조가 1보다 크다면 유니크하지 않으니까 복사본을 만들고 이를 변경하는 것임!!!
 
-![](https://hackmd.io/_uploads/By4NZWEN3.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/89e39b0b-76eb-44cf-b14e-22d0eda58f20/image.png)
+
 
 프로토콜 타입의 변수가 복사되고 저장되는 방법과 메서드 디스패치의 작동 방식을 살펴보았습니다.
 
 성능에 어떤 의미가 있는지 살펴봅시다
 
-![](https://hackmd.io/_uploads/SJBJGbEE3.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/0d47ff91-353b-41f2-9e45-784f0456bf26/image.png)
+
 
 Existential container의 인라인 valueBuffer에 들어갈 수 있는 작은 값을 포함하는 프로토콜 타입이 있는 경우 힙 할당이 없습니다.
 구조체에 참조가 포함되어 있지 않으면 참조 카운트도 없습니다. (따라서 정말 빠른 코드라함)
-ㅍalue witness 및 protocol witness table을 통한 간접 지정으로 인해 동적으로 다형성 동작을 허용하는 dinamic dispatch의 모든 기능을 얻을 수 있습니다.
-
-[](https://hackmd.io/_uploads/HJwrM-EN2.png)
+value witness 및 protocol witness table을 통한 간접 지정으로 인해 동적으로 다형성 동작을 허용하는 dinamic dispatch의 모든 기능을 얻을 수 있습니다.
 
 큰 값과 비교해보면!
 큰 값은 프로토콜 타입의 변수를 초기화하거나 할당할 떄마다 힙 할당을 발생시킵니다.
 큰 값 구조체에 참조가 포함된 경우 잠재적으로 참조 카운팅이 있습니다.
 
-![](https://hackmd.io/_uploads/SyD8zWNN3.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/84c4dc81-b9ca-443c-aeb4-343c51f736d5/image.png)
+
+
+
 
 COW와 함께 간접 저장을 사용하여 비용이 많이 드는 힙 할당을 교환하는 데 사용할 수 있는 기술을 보여주었습니다.
 
-![](https://hackmd.io/_uploads/rJ1YzZE42.png)
+
+![](https://velog.velcdn.com/images/xoxo0223/post/6abd7a5b-3d87-4f2a-a0d0-2dce7dfcfe7f/image.png)
+
+
 비용이 저렴한 참조 카운팅을 위해서
 
 이것은 클래스를 사용하는 것과 유리하게 비교됩니다.
 클래스도 참조 횟수를 발생시킵니다. 그리고 초기화 시 힙할당도 발생시킵니다.
 좋은 트레이드오프라고 합니다.
 
-![](https://hackmd.io/_uploads/Bkr1Q-E42.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/03cc288a-d3ad-43fb-b780-d7c2ae62bedb/image.png)
+
+
+
 
 다시 요약하자면 프로토콜 타입은 동적인 형태와 다형성을 제공합니다.
 프로토콜과 함꼐 값 타입을 사용할 수 있으며 프로토콜 타입의 배열 내부에 Line과 Point를 동시에 저장할 수 있습니다. 이는 protocol, value witness table과 existential container를 통해서 달성됩니다.
@@ -367,15 +380,25 @@ COW와 함께 간접 저장을 사용하여 비용이 많이 드는 힙 할당�
 큰 값을 복사하면 힙 할당이 발생합니다.
 간접 저장과 COW로 구조체를 구현하면 이 문제를 해결할 수 있습니다.(여러번 강조하네요)
 
-![](https://hackmd.io/_uploads/Sy_ombVNn.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/dd28c907-5798-47f8-bfb0-89c96ccec959/image.png)
+
+
+
 
 코드로 다시 돌아가서
 우리의 어플리케이션에서는 프로토콜 타입의 매개변수를 받는 함수인 drawCopy가 있음
 
 그러나 우리가 사용하는 방식은 항상 구체적인 타입에 사용하는 것입니다.
 
-![](https://hackmd.io/_uploads/ry4oEW44h.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/83dbe43d-4a86-4c4d-bd0d-9e4721e4dc0b/image.png)
+
+
+
 여기서는 Line에서 사용했습니다.
 
-![](https://hackmd.io/_uploads/S1paEZVVn.png)
+![](https://velog.velcdn.com/images/xoxo0223/post/2f4d5ae0-2ed1-49c3-a864-7fdf93904831/image.png)
+
 나중에 우리 프로그램에서 Point에서 사용할 것입니다.
+
+여기서 제네릭 코드를 사용할 수 있을까?
+예스
