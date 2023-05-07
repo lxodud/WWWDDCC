@@ -6,6 +6,8 @@
 
 🔥 [Understanding Swift Performance 2](https://github.com/lxodud/WWWDDCC/blob/main/WWDC%202016/Understanding%20Swift%20Performance%202.md)
 
+🔥 [Understanding Swift Performance 3](https://github.com/lxodud/WWWDDCC/blob/main/WWDC%202016/Understanding%20Swift%20Performance%203.md)
+
 🧵 [Concurrent Programming With GCD](https://github.com/lxodud/WWWDDCC/blob/main/WWDC%202016/Concurrent%20Programming%20With%20GCD.md)
 
 # WWDC 2019
