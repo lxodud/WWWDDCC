@@ -1,4 +1,7 @@
-# 제네릭 vs Existential 타입
+# [WWDC 2016] Understanding Swift Performance 3
+[Understanding Swift Performance - WWDC16 - Videos - Apple Developer](https://developer.apple.com/videos/play/wwdc2016/416/)
+
+## 제네릭 vs Existential 타입
 
 ![](https://velog.velcdn.com/images/xoxo0223/post/4b125511-83fb-4dd2-a04c-3c9437853cbb/image.png)
 
