@@ -27,7 +27,7 @@ draw 메서드를 선언하는 Drawable 프로토콜이 있다.
 
 해당 프로토콜을 채택하는 클래스도 가질 수 있음
 
-그러나 클래스와 함께 제공되는 reference semantic이 의도하지 않은 
+그러나 클래스와 함께 제공되는 reference semantic이 의도하지 않은 공유
 로 인해 사용하지 않기로 결정했다함
 
 ![](https://i.imgur.com/wFAlOpJ.png)
