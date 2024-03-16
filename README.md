@@ -41,9 +41,13 @@
 🎭 [WWDC 2021 - Use async/await with URLSession](https://github.com/lxodud/WWWDDCC/blob/main/Swift%20Concurrency/Use%20async-await%20with%20URLSession.md)
 
 # SwiftUI
-🟦 [WWDC 2019 - Building Custom Views with SwiftUI](https://github.com/lxodud/WWWDDCC/blob/main/SwiftUI/%5BWWDC%202019%5D%20Building%20Custom%20Views%20with%20SwiftUI)  
+🟦 [WWDC 2019 - Building Custom Views with SwiftUI](https://github.com/lxodud/WWWDDCC/blob/main/SwiftUI/%5BWWDC%202019%5D%20Building%20Custom%20Views%20with%20SwiftUI)
+
 🟦 [WWDC 2019 - Data Essentials in SwiftUI](https://github.com/lxodud/WWWDDCC/blob/main/SwiftUI/%5BWWDC%202019%5D%20Data%20Essentials%20in%20SwiftUI)  
+
 🟦 [WWDC 2019 - Data Flow Through SwiftUI](https://github.com/lxodud/WWWDDCC/blob/main/SwiftUI/%5BWWDC%202019%5D%20Data%20Flow%20Through%20SwiftUI)  
+
 🟦 [WWDC 2019 - Demystify SwiftUI](https://github.com/lxodud/WWWDDCC/blob/main/SwiftUI/%5BWWDC%202019%5D%20Demystify%20SwiftUI)  
+
 🟦 [WWDC 2019 - Building Custom Views with SwiftUI](https://github.com/lxodud/WWWDDCC/blob/main/SwiftUI/%5BWWDC%202019%5D%20Integrating%20SwiftUI)  
 
